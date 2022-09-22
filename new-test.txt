@@ -1,0 +1,42 @@
+api version: apps/v1
+kind       : Deployment
+metadata   : 
+   name    :valaxy-regapp
+   lebels  :
+   app     : regapp
+   
+spec:
+   replicas:2
+   selector:
+   match labels:
+   app     :regapp
+template:
+   metadata:
+   labels  :
+   app     :regapp
+spec:
+   containers:
+   -name     :regapp
+   image     : valaxy/regapp
+   image pull policy:always
+   ports:
+    -container port:8080
+ strategy:
+     type:Rolling updates
+     rolling update:
+     max surge:
+     max unavailable:1
+---
+ api version:v1
+ kind       :service
+ metadata   :
+     name   : valaxy service
+     labels:
+     app   :regapp
+ spec:
+     selector:
+     app     :regapp
+     ports:
+       port :8080
+       target port:8080
+       type  :load balancer
